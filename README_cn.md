@@ -5,7 +5,7 @@
 </div>
 
 <div align="center">
-  <img src="https://i.loli.net/2021/07/30/ZKNMmz54Q3uqlrW.png" width="96px" height="96px"/>
+  <img src="https://dl.960960.xyz/screenshots/logo.png" width="96px" height="96px"/>
 </div>
 
 <h1 align="center">
@@ -18,22 +18,28 @@
 
 <div align="center">
 
-[下载客户端](https://koodo.960960.xyz/zh) | [在线预览](https://reader.960960.xyz) | [开发计划](https://troyeguo.notion.site/215baeda57804fd29dbb0e91d1e6a021?v=360c00183d944b598668f34c255edfd7) | [帮助文档](https://troyeguo.notion.site/Koodo-Reader-0c9c7ccdc5104a54825dfc72f1c84bea)
+[下载客户端](https://koodo.960960.xyz/zh) | [在线预览](https://reader.960960.xyz) | [开发计划](https://koodo.960960.xyz/zh/roadmap) | [帮助文档](https://koodo.960960.xyz/zh/document)
 
 </div>
 
 ## 预览
 
 <div align="center">
-  <img src="https://i.loli.net/2021/08/08/I37WPYFJcC1jltn.png" >
-  <img src="https://i.loli.net/2021/08/08/G7WvUQFTrEpSCKg.png" >
+  <br/>
+  <br/>
+  <kbd><img src="https://dl.960960.xyz/screenshots/1.png" width="800px"></kbd>
+  <br/>
+  <br/>
+  <kbd><img src="https://dl.960960.xyz/screenshots/5.png" width="800px"></kbd>
+  <br/>
+  <br/>
 </div>
 
 ## 特色
 
 - 支持阅读格式：
   - EPUB (**.epub**)
-  - 扫描文档 (**.pdf**, **.djvu**)
+  - PDF (**.pdf**)
   - Kindle (**.azw3**, **.mobi**, **.azw**)
   - 纯文本 (**.txt**)
   - 漫画 (**.cbr**, **.cbz**, **.cbt**, **.cb7**)
@@ -41,7 +47,7 @@
   - FB2 (**.fb2**)
   - 超文本 (**.html**, **.xml**, **.xhtml**, **.mhtml**, **.htm**, **.htm**)
 - 支持 **Windows**，**macOS**，**Linux** 和 **网页版**
-- 备份数据到 **OneDrive**, **Google Drive**, **Dropbox**, **FTP**, **SFTP**, **WebDAV**
+- 备份数据到 **OneDrive**, **Google Drive**, **Dropbox**, **FTP**, **SFTP**, **WebDAV**, **S3**, **S3 compatible**
 - 自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步
 - 双页模式，单页模式，滚动模式
 - 听书功能，翻译功能，词典功能，触控屏支持，批量导入图书
@@ -93,17 +99,29 @@ flatpak run io.github.troyeguo.koodo-reader
 
 <div align="center">
   <b>列表模式</b>
-  <img src="https://i.loli.net/2021/08/08/JyNHfThMs184Um2.png" >
+  <br/>
+  <br/>
+  <kbd><img src="https://dl.960960.xyz/screenshots/2.png" width="800px"></kbd>
+  <br/>
+  <br/>
   <b>封面模式</b>
-  <img src="https://i.loli.net/2021/08/08/76zkDEAobd4qsmR.png" >
+  <br/>
+  <br/>
+  <kbd><img src="https://dl.960960.xyz/screenshots/3.png" width="800px"></kbd>
+  <br/>
+  <br/>
   <b>阅读菜单</b>
-  <img src="https://i.loli.net/2021/08/08/LeEN9gnOvFmfVWA.png" >
-  <b>备份和恢复</b>
-  <img src="https://i.loli.net/2021/08/08/aRIAiYT2dGJQhC1.png" >
-  <b>黑夜模式和主题色</b>
-  <img src="https://i.loli.net/2021/08/08/ynqUNpX93xZefdw.png" >
-  <b>笔记管理</b>
-  <img src="https://i.loli.net/2021/08/09/sARQBoefvGklHwC.png" >
+  <br/>
+  <br/>
+  <kbd><img src="https://dl.960960.xyz/screenshots/6.png" width="800px"></kbd>
+  <br/>
+  <br/>
+  <b>黑夜模式</b>
+  <br/>
+  <br/>
+  <kbd><img src="https://dl.960960.xyz/screenshots/4.png" width="800px"></kbd>
+  <br/>
+  <br/>
 </div>
 
 ## 运行源码

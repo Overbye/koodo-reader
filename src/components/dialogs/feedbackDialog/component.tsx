@@ -5,18 +5,31 @@ import toast from "react-hot-toast";
 import "./feedbackDialog.css";
 import packageInfo from "../../../../package.json";
 import { openExternalUrl } from "../../../utils/serviceUtils/urlUtil";
-import { checkDeveloperUpdate } from "../../../utils/commonUtil";
+import {
+  checkDeveloperUpdate,
+  getUploadUrl,
+  uploadFile,
+} from "../../../utils/commonUtil";
+declare var window: any;
 class FeedbackDialog extends Component<
   FeedbackDialogProps,
   FeedbackDialogState
 > {
   constructor(props: FeedbackDialogProps) {
     super(props);
-    this.state = { isNew: false, developerVersion: "1.0.0", isSending: false };
+    this.state = {
+      isNew: false,
+      developerVersion: "1.0.0",
+      isSending: false,
+      uploadUrl: "",
+      fileContent: null,
+    };
   }
   async componentDidMount() {
     let version = (await checkDeveloperUpdate()).version.substr(1);
     this.setState({ developerVersion: version });
+    let url = await getUploadUrl();
+    this.setState({ uploadUrl: url });
   }
   handleCancel = () => {
     this.props.handleFeedbackDialog(false);
@@ -24,7 +37,19 @@ class FeedbackDialog extends Component<
 
   handleComfirm = async () => {
     this.setState({ isSending: true });
-    toast(this.props.t("Sending"));
+
+    let uploadResult = true;
+    if (this.state.fileContent && this.state.uploadUrl) {
+      uploadResult = await uploadFile(
+        this.state.uploadUrl,
+        this.state.fileContent
+      );
+    }
+    if (!uploadResult) {
+      toast.error(this.props.t("Error happened"));
+      this.setState({ isSending: false });
+      return;
+    }
     let content: string = (
       document.querySelector(
         "#feedback-dialog-content-box"
@@ -40,17 +65,28 @@ class FeedbackDialog extends Component<
         "#feedback-dialog-email-box"
       ) as HTMLTextAreaElement
     ).value;
-
+    if (subject === "") {
+      toast(this.props.t("Subject can't be empty"));
+      this.setState({ isSending: false });
+      return;
+    }
+    toast(this.props.t("Sending"));
     let version = packageInfo.version;
     const os = window.require("os");
     const system = os.platform() + " " + os.version();
     const axios = window.require("axios");
+    let fileName = "";
+    if (this.state.fileContent && this.state.uploadUrl) {
+      var segments = this.state.uploadUrl.split("/").reverse()[0];
+      fileName = segments.split("?")[0];
+    }
     let data = JSON.stringify({
       version,
       os: system,
       subject,
       content,
       email,
+      assets: fileName,
     });
 
     let config = {
@@ -65,7 +101,7 @@ class FeedbackDialog extends Component<
 
     let res = await axios.request(config);
     if (res.data.result !== "ok") {
-      toast.error(this.props.t("Error happens"));
+      toast.error(this.props.t("Error happened"));
       this.setState({ isSending: false });
       return;
     }
@@ -75,18 +111,31 @@ class FeedbackDialog extends Component<
   handleJump = (url: string) => {
     openExternalUrl(url);
   };
+  getFileName(url: string) {
+    // 匹配最后一个斜杠后面和问号前面的内容
+    var regex = /([^?]+)(?=\?|$)/;
+    var match = url.match(regex);
+
+    if (match) {
+      // 返回匹配到的内容
+      return match[1];
+    } else {
+      // 如果没有匹配到，则返回空字符串
+      return "";
+    }
+  }
   render() {
     return (
       <div className="feedback-dialog-container">
         <div className="feedback-dialog-box">
           <div className="feedback-dialog-title">
-            <Trans>Feedback</Trans>
+            <Trans>Report</Trans>
           </div>
           <div className="feedback-dialog-info-text">
             <Trans>
-              Thanks for using the developer version of Koodo Reader, leave a
-              comment if you encounter any problems. Note that we can't reply to
-              you from here. For faster and better support, please visit
+              Thanks for using the developer version, leave a comment if you
+              encounter any problems. Note that we can't reply to you from here.
+              For faster and better support, please visit
             </Trans>
             &nbsp;
             <span
@@ -95,7 +144,7 @@ class FeedbackDialog extends Component<
               }}
               style={{ color: "rgb(35, 170, 242)", cursor: "pointer" }}
             >
-              <Trans>Our Website</Trans>
+              <Trans>Our website</Trans>
             </span>
           </div>
 
@@ -107,7 +156,7 @@ class FeedbackDialog extends Component<
             >
               <Trans>
                 You're not using the latest version of Koodo Reader. Please
-                update to the latest version to see if the problem still exsits
+                update first
               </Trans>
               &nbsp;
               <span
@@ -136,12 +185,43 @@ class FeedbackDialog extends Component<
                   : { marginTop: "30px" }
               }
             />
+            <input
+              type="file"
+              multiple={true}
+              id="feedback-file-box"
+              name="file"
+              className="feedback-file-box"
+              onChange={(event) => {
+                if (!event || !event.target || !event.target.files) {
+                  toast.error("Empty files");
+                }
+                let files: any = event.target.files;
+                let zip = new window.JSZip();
+                for (let index = 0; index < files.length; index++) {
+                  const file = files[index];
+                  var fileSize = file.size; // 文件大小，单位为字节
+                  // 将文件大小转换为MB
+                  var fileSizeMB = fileSize / (1024 * 1024);
+                  if (fileSizeMB > 20) {
+                    toast.error(this.props.t("File size is larger than 20MB"));
+                    event.target.value = "";
+                    break;
+                  } else {
+                    zip.file(file.name, file);
+                  }
+                }
+                zip.generateAsync({ type: "blob" }).then((content) => {
+                  this.setState({ fileContent: content });
+                });
+              }}
+            />
             <textarea
               name="content"
               placeholder={this.props.t("Detailed description of the problem")}
               id="feedback-dialog-content-box"
               className="feedback-dialog-content-box"
             />
+
             <textarea
               name="email"
               placeholder={this.props.t(

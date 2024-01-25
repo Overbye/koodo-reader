@@ -10,6 +10,7 @@ import GoogleDriveUtil from "../../../utils/syncUtils/googledrive";
 import WebdavUtil from "../../../utils/syncUtils/webdav";
 import FtpUtil from "../../../utils/syncUtils/ftp";
 import SFtpUtil from "../../../utils/syncUtils/sftp";
+import S3Util from "../../../utils/syncUtils/s3compatible";
 import { BackupDialogProps, BackupDialogState } from "./interface";
 import TokenDialog from "../tokenDialog";
 import StorageUtil from "../../../utils/serviceUtils/storageUtil";
@@ -46,7 +47,7 @@ class BackupDialog extends React.Component<
   handleFinish = () => {
     this.setState({ currentStep: 2 });
     this.props.handleLoadingDialog(false);
-    this.showMessage("Excute Successfully");
+    this.showMessage("Execute successful");
     this.props.handleFetchBooks();
   };
   handleRestoreToLocal = async (event: any) => {
@@ -93,6 +94,7 @@ class BackupDialog extends React.Component<
         case "googledrive":
         case "ftp":
         case "sftp":
+        case "s3compatible":
           if (!StorageUtil.getReaderConfig(name + "_token")) {
             this.props.handleTokenDialog(true);
             break;
@@ -108,6 +110,8 @@ class BackupDialog extends React.Component<
               ? GoogleDriveUtil
               : name === "sftp"
               ? SFtpUtil
+              : name === "s3compatible"
+              ? S3Util
               : WebdavUtil;
           if (this.state.isBackup === "yes") {
             this.showMessage("Uploading, please wait");
@@ -160,6 +164,7 @@ class BackupDialog extends React.Component<
               if (
                 (item.icon === "webdav" ||
                   item.icon === "ftp" ||
+                  item.icon === "s3compatible" ||
                   item.icon === "sftp") &&
                 !isElectron
               ) {
@@ -182,7 +187,7 @@ class BackupDialog extends React.Component<
                   className="backup-page-list-title"
                   onClick={() => {
                     StorageUtil.setReaderConfig(item.icon + "_token", "");
-                    this.showMessage("Unauthorize Successfully");
+                    this.showMessage("Unauthorize successful");
                   }}
                   style={{ color: "rgb(0, 120, 212)" }}
                 >
@@ -307,8 +312,8 @@ class BackupDialog extends React.Component<
               <div className="backup-page-finish-text">
                 <Trans>
                   {this.state.isBackup === "yes"
-                    ? "Backup Successfully"
-                    : "Restore Successfully"}
+                    ? "Backup successful"
+                    : "Restore successful"}
                 </Trans>
               </div>
               {this.state.isBackup ? null : (
@@ -344,7 +349,7 @@ class BackupDialog extends React.Component<
               this.setState({ currentStep: 0 });
             }}
           >
-            <Trans>Last Step</Trans>
+            <Trans>Last step</Trans>
           </div>
         ) : this.state.currentStep === 0 ? (
           <div
@@ -354,7 +359,7 @@ class BackupDialog extends React.Component<
             }}
             style={this.state.isBackup ? {} : { display: "none" }}
           >
-            <Trans>Next Step</Trans>
+            <Trans>Next step</Trans>
           </div>
         ) : null}
       </div>

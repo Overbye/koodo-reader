@@ -1,12 +1,11 @@
 import { restore } from "./restoreUtil";
 import StorageUtil from "../serviceUtils/storageUtil";
 
-class SFtpUtil {
+class S3Util {
   static UploadFile = async (blob: any) => {
     return new Promise<boolean>(async (resolve, reject) => {
-      let { url, username, password, port, dir } = JSON.parse(
-        StorageUtil.getReaderConfig("sftp_token") || "{}"
-      );
+      let { endpoint, region, bucketName, accessKeyId, secretAccessKey } =
+        JSON.parse(StorageUtil.getReaderConfig("s3compatible_token") || "{}");
       const fs = window.require("fs");
       const path = window.require("path");
       const { ipcRenderer } = window.require("electron");
@@ -15,13 +14,13 @@ class SFtpUtil {
       const fileName = "data.zip";
       fs.writeFileSync(path.join(dirPath, fileName), Buffer.from(arrayBuffer));
       resolve(
-        await ipcRenderer.invoke("sftp-upload", {
-          url,
-          username,
-          password,
+        await ipcRenderer.invoke("s3-upload", {
+          endpoint,
+          region,
+          bucketName,
+          accessKeyId,
+          secretAccessKey,
           fileName,
-          port,
-          dir,
         })
       );
     });
@@ -32,17 +31,16 @@ class SFtpUtil {
       const fs = window.require("fs");
       const path = window.require("path");
       const { ipcRenderer } = window.require("electron");
-      let { url, username, password, port, dir } = JSON.parse(
-        StorageUtil.getReaderConfig("sftp_token") || "{}"
-      );
+      let { endpoint, region, bucketName, accessKeyId, secretAccessKey } =
+        JSON.parse(StorageUtil.getReaderConfig("s3compatible_token") || "{}");
       const dirPath = ipcRenderer.sendSync("user-data", "ping");
-      let result = await ipcRenderer.invoke("sftp-download", {
-        url,
-        username,
-        password,
+      let result = await ipcRenderer.invoke("s3-download", {
+        endpoint,
+        region,
+        bucketName,
+        accessKeyId,
+        secretAccessKey,
         fileName,
-        port,
-        dir,
       });
       if (result) {
         var data = fs.readFileSync(path.join(dirPath, fileName));
@@ -69,4 +67,4 @@ class SFtpUtil {
   };
 }
 
-export default SFtpUtil;
+export default S3Util;

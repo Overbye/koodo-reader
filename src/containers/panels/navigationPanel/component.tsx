@@ -10,9 +10,6 @@ import * as DOMPurify from "dompurify";
 import EmptyCover from "../../../components/emptyCover";
 import StorageUtil from "../../../utils/serviceUtils/storageUtil";
 
-import CFI from "epub-cfi-resolver";
-import { getIframeDoc } from "../../../utils/serviceUtils/docUtil";
-
 class NavigationPanel extends React.Component<
   NavigationPanelProps,
   NavigationPanelState
@@ -79,17 +76,6 @@ class NavigationPanel extends React.Component<
                   bookLocation.chapterDocIndex,
                   bookLocation.chapterHref,
                   bookLocation.chapterTitle
-                );
-                let cfiObj = new CFI(bookLocation.cfi);
-                let doc: any = getIframeDoc();
-                if (!doc) {
-                  return;
-                }
-                var bookmark = cfiObj.resolveLast(doc, {
-                  ignoreIDs: true,
-                });
-                await this.props.htmlBook.rendition.goToNode(
-                  bookmark.node.parentElement
                 );
               } else {
                 await this.props.htmlBook.rendition.goToPosition(
@@ -212,7 +198,7 @@ class NavigationPanel extends React.Component<
                 className="navigation-search-title"
                 style={{ height: "20px", margin: "0px 25px 13px" }}
               >
-                <Trans>Search in the book</Trans>
+                <Trans>Search in the Book</Trans>
               </div>
               <SearchBox {...searchProps} />
             </div>
@@ -262,11 +248,11 @@ class NavigationPanel extends React.Component<
                 <Trans>
                   {this.props.currentBook.author
                     ? this.props.currentBook.author
-                    : "Unknown Author"}
+                    : "Unknown author"}
                 </Trans>
               </p>
               <span className="reading-duration">
-                <Trans>Reading Time</Trans>: {Math.floor(this.props.time / 60)}
+                <Trans>Reading time</Trans>: {Math.floor(this.props.time / 60)}
                 &nbsp; min
               </span>
               <div className="navigation-search-box">

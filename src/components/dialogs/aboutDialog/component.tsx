@@ -12,8 +12,6 @@ import {
 } from "../../../utils/syncUtils/exportUtil";
 import "./aboutDialog.css";
 import StorageUtil from "../../../utils/serviceUtils/storageUtil";
-import { checkStableUpdate } from "../../../utils/commonUtil";
-import packageInfo from "../../../../package.json";
 
 declare var window: any;
 class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
@@ -60,13 +58,9 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                   StorageUtil.getReaderConfig("lang") === "zhTW" ||
                   StorageUtil.getReaderConfig("lang") === "zhMO"
                 ) {
-                  this.handleJump(
-                    "https://troyeguo.notion.site/Koodo-Reader-0c9c7ccdc5104a54825dfc72f1c84bea"
-                  );
+                  this.handleJump("https://koodo.960960.xyz/zh/document");
                 } else {
-                  this.handleJump(
-                    "https://troyeguo.notion.site/Koodo-Reader-Document-9c767af3d66c459db996bdd08a34c34b"
-                  );
+                  this.handleJump("https://koodo.960960.xyz/en/document");
                 }
               }}
             >
@@ -75,18 +69,6 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
             <li
               className="sort-by-category-list"
               onClick={async () => {
-                try {
-                  let stableLog = await checkStableUpdate();
-                  if (
-                    packageInfo.version.localeCompare(stableLog.version) > 0 &&
-                    isElectron
-                  ) {
-                    this.props.handleFeedbackDialog(true);
-                    return;
-                  }
-                } catch (error) {
-                  console.log(error);
-                }
                 this.handleJump(`https://koodo.960960.xyz/en/support`);
               }}
             >
@@ -100,13 +82,9 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                   StorageUtil.getReaderConfig("lang") === "zhTW" ||
                   StorageUtil.getReaderConfig("lang") === "zhMO"
                 ) {
-                  this.handleJump(
-                    "https://troyeguo.notion.site/215baeda57804fd29dbb0e91d1e6a021?v=360c00183d944b598668f34c255edfd7"
-                  );
+                  this.handleJump("https://koodo.960960.xyz/zh/roadmap");
                 } else {
-                  this.handleJump(
-                    "https://troyeguo.notion.site/d1c19a132932465bae1d89dd963c92ea?v=ca8aa69cf25849c18c92b92ba868663b"
-                  );
+                  this.handleJump("https://koodo.960960.xyz/en/roadmap");
                 }
               }}
             >
@@ -118,7 +96,7 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                 this.handleJump("https://koodo.960960.xyz");
               }}
             >
-              <Trans>Our Website</Trans>
+              <Trans>Our website</Trans>
             </li>
             <li
               className="sort-by-category-list"
@@ -136,7 +114,7 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                 this.handleJump("https://github.com/koodo-reader/koodo-reader");
               }}
             >
-              <Trans>GitHub Repo</Trans>
+              <Trans>GitHub repository</Trans>
             </li>
 
             {isElectron && (
@@ -148,7 +126,7 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                     .ipcRenderer.invoke("open-console", "ping");
                 }}
               >
-                <Trans>Open Console</Trans>
+                <Trans>Open console</Trans>
               </li>
             )}
             {this.props.isNewWarning && (
@@ -159,7 +137,7 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                 }}
                 style={{ color: "rgb(35, 170, 242)" }}
               >
-                <Trans>New Version</Trans>
+                <Trans>New version</Trans>
               </li>
             )}
             <li
@@ -172,7 +150,7 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                 event.stopPropagation();
               }}
             >
-              <Trans>Export All</Trans>
+              <Trans>Export all</Trans>
               <span className="icon-dropdown icon-export-all"></span>
             </li>
           </ul>
@@ -207,13 +185,13 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                   ...this.props.books,
                   ...this.props.deletedBooks,
                 ]);
-                toast.success(this.props.t("Export Successfully"));
+                toast.success(this.props.t("Export successful"));
               } else {
                 toast(this.props.t("Nothing to export"));
               }
             }}
           >
-            <Trans>Export All Books</Trans>
+            <Trans>Export all books</Trans>
           </li>
           <li
             className="sort-by-category-list"
@@ -225,13 +203,13 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                   this.props.notes.filter((item) => item.notes !== ""),
                   [...this.props.books, ...this.props.deletedBooks]
                 );
-                toast.success(this.props.t("Export Successfully"));
+                toast.success(this.props.t("Export successful"));
               } else {
                 toast(this.props.t("Nothing to export"));
               }
             }}
           >
-            <Trans>Export All Notes</Trans>
+            <Trans>Export all notes</Trans>
           </li>
           <li
             className="sort-by-category-list"
@@ -243,13 +221,13 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                   this.props.notes.filter((item) => item.notes === ""),
                   [...this.props.books, ...this.props.deletedBooks]
                 );
-                toast.success(this.props.t("Export Successfully"));
+                toast.success(this.props.t("Export successful"));
               } else {
                 toast(this.props.t("Nothing to export"));
               }
             }}
           >
-            <Trans>Export All Highlights</Trans>
+            <Trans>Export all highlights</Trans>
           </li>
           <li
             className="sort-by-category-list"
@@ -261,13 +239,13 @@ class AboutDialog extends React.Component<AboutDialogProps, AboutDialogState> {
                   ...this.props.books,
                   ...this.props.deletedBooks,
                 ]);
-                toast.success(this.props.t("Export Successfully"));
+                toast.success(this.props.t("Export successful"));
               } else {
                 toast(this.props.t("Nothing to export"));
               }
             }}
           >
-            <Trans>Export All Dictionary History</Trans>
+            <Trans>Export all dictionary history</Trans>
           </li>
         </div>
       </>
